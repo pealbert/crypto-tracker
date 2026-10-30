@@ -1,0 +1,305 @@
+@import "tailwindcss";
+
+@theme {
+	--font-sans:
+		"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+		"Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	--color-accent: #add8e6;
+	--color-canvas: #010203;
+	--color-body-text: #e0e0e0;
+	--color-muted-text: #9ca3af;
+	--color-positive: #2ed573;
+	--color-negative: #ff4757;
+}
+
+@layer base {
+	:root {
+		font-family: var(--font-sans);
+		line-height: 1.5;
+		font-weight: 400;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	body {
+		@apply min-h-screen min-w-80;
+	}
+}
+
+@layer components {
+	.app {
+		@apply min-h-screen bg-canvas;
+	}
+
+	/* Header */
+	.header {
+		@apply sticky top-0 z-100 border-b border-white/10 py-8 backdrop-blur-[20px];
+		box-shadow: 0 8px 32px rgb(0 0 0 / 40%);
+	}
+	.header-content {
+		@apply mx-auto flex max-w-350 flex-wrap items-center justify-between gap-8 px-8;
+	}
+	.logo-section h1 {
+		@apply mb-2 bg-accent bg-clip-text text-[2.5rem] font-bold text-transparent;
+	}
+	.logo-section p {
+		@apply text-[0.95rem] text-[#a0a0b0];
+	}
+	.search-section {
+		@apply max-w-125 flex-1;
+	}
+	.search-input {
+		@apply w-full rounded-full border border-white/10 bg-white/5 px-6 py-4 text-base text-white backdrop-blur-[10px] transition-all duration-300;
+	}
+	.search-input::placeholder {
+		@apply text-[#6b6b7a];
+	}
+	.search-input:focus {
+		@apply border-accent bg-white/8 outline-none;
+		box-shadow: 0 0 0 3px rgb(173 216 230 / 20%);
+	}
+
+	/* Controls */
+	.controls {
+		@apply mx-auto my-8 flex max-w-350 flex-wrap items-center justify-between gap-4 px-8;
+	}
+	.filter-group {
+		@apply flex items-center gap-4;
+	}
+	.filter-group label {
+		@apply font-semibold text-body-text;
+	}
+	.filter-group select {
+		@apply cursor-pointer rounded-lg border border-white/10 bg-white/5 px-5 py-3 text-[0.95rem] text-white backdrop-blur-[10px] transition-all duration-300;
+	}
+	.filter-group select:hover {
+		@apply bg-white/8;
+	}
+	.filter-group select:focus {
+		@apply border-accent outline-none;
+		box-shadow: 0 0 0 3px rgb(173 216 230 / 20%);
+	}
+	.view-toggle {
+		@apply flex gap-2;
+	}
+	.view-toggle button {
+		@apply cursor-pointer rounded-lg border border-white/10 bg-white/5 px-6 py-3 font-semibold text-body-text backdrop-blur-[10px] transition-all duration-300;
+	}
+	.view-toggle button:hover {
+		@apply border-white/20 bg-white/10;
+	}
+	.view-toggle button.active {
+		@apply border-transparent bg-accent text-canvas;
+		box-shadow: 0 4px 15px rgb(173 216 230 / 30%);
+	}
+
+	/* Crypto cards */
+	.crypto-container {
+		@apply mx-auto max-w-350 p-8;
+	}
+	.crypto-container.grid {
+		@apply grid gap-6;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	}
+	.crypto-container.list {
+		@apply grid grid-cols-1 gap-4;
+	}
+	.crypto-card {
+		@apply relative cursor-pointer overflow-hidden rounded-[20px] border border-white/10 bg-white/3 p-6 backdrop-blur-[20px] transition-all duration-300;
+		box-shadow: 0 8px 32px rgb(0 0 0 / 30%);
+	}
+	.crypto-card::before {
+		content: "";
+		@apply absolute inset-x-0 top-0 h-px opacity-0 transition-opacity duration-300;
+		background: linear-gradient(90deg, transparent, rgb(173 216 230 / 50%), transparent);
+	}
+	.crypto-card:hover {
+		@apply -translate-y-2 border-accent/30 bg-white/5;
+		box-shadow: 0 16px 48px rgb(0 0 0 / 50%);
+	}
+	.crypto-card:hover::before {
+		@apply opacity-100;
+	}
+	.crypto-header {
+		@apply mb-4 flex items-start justify-between;
+	}
+	.crypto-info {
+		@apply flex items-center gap-4;
+	}
+	.crypto-info img {
+		@apply size-12.5 rounded-full border-2 border-white/10;
+	}
+	.crypto-info h3 {
+		@apply mb-1 text-xl font-semibold text-body-text;
+	}
+	.crypto-info .symbol {
+		@apply text-[0.85rem] font-semibold text-muted-text;
+	}
+	.crypto-info .rank {
+		@apply mt-1 inline-block rounded-[20px] bg-accent px-3 py-1 text-xs font-bold text-canvas;
+		box-shadow: 0 4px 10px rgb(173 216 230 / 30%);
+	}
+	.crypto-price {
+		@apply my-6;
+	}
+	.crypto-price .price {
+		@apply mb-2 text-[1.75rem] font-bold text-white;
+	}
+	.crypto-price .change {
+		@apply inline-block rounded-lg px-4 py-2 text-[1.1rem] font-semibold;
+	}
+	.crypto-price .change.positive,
+	.change-badge.positive {
+		@apply border border-positive/30 bg-positive/15 text-positive;
+	}
+	.crypto-price .change.negative,
+	.change-badge.negative {
+		@apply border border-negative/30 bg-negative/15 text-negative;
+	}
+	.crypto-stats {
+		@apply flex justify-between gap-4 border-t border-white/10 pt-4;
+	}
+	.stat {
+		@apply flex flex-col gap-1;
+	}
+	.stat-label {
+		@apply text-xs font-semibold text-muted-text uppercase;
+	}
+	.stat-value {
+		@apply text-[0.95rem] font-bold text-body-text;
+	}
+
+	/* Loading and empty states */
+	.loading {
+		@apply flex flex-col items-center justify-center gap-4 px-8 py-16 text-body-text;
+	}
+	.spinner {
+		@apply size-12.5 animate-spin rounded-full border-4 border-accent/20 border-t-accent;
+	}
+	.loading p {
+		@apply text-[1.1rem] font-medium;
+	}
+	.no-results {
+		@apply px-8 py-16 text-center text-[1.2rem] text-body-text;
+	}
+
+	/* Footer and navigation */
+	.footer {
+		@apply mt-12 border-t border-white/10 p-8 text-center backdrop-blur-[20px];
+		background: rgb(20 20 40 / 40%);
+	}
+	.footer p {
+		@apply font-medium text-muted-text;
+	}
+	.back-button {
+		@apply inline-block cursor-pointer rounded-lg border border-white/10 bg-white/5 px-6 py-3 font-semibold text-body-text no-underline transition-all duration-300;
+	}
+	.back-button:hover {
+		@apply border-white/20 bg-white/10;
+	}
+
+	/* Coin detail */
+	.coin-detail {
+		@apply mx-auto max-w-350 p-8;
+	}
+	.coin-header {
+		@apply mb-8 flex flex-wrap items-center justify-between gap-4;
+	}
+	.coin-title {
+		@apply flex items-center gap-6;
+	}
+	.coin-title img {
+		@apply size-16 rounded-full border-2 border-accent/30;
+	}
+	.coin-title h1 {
+		@apply mb-2 text-[2rem] text-body-text;
+	}
+	.coin-title .symbol {
+		@apply text-base font-semibold text-muted-text;
+	}
+	.coin-header .rank {
+		@apply inline-block rounded-[20px] bg-accent px-4 py-2 text-[0.9rem] font-bold text-canvas;
+		box-shadow: 0 4px 10px rgb(173 216 230 / 30%);
+	}
+	.coin-price-section,
+	.chart-section {
+		@apply mb-8 rounded-[20px] border border-white/10 bg-white/3 p-8 backdrop-blur-[20px];
+	}
+	.current-price {
+		@apply mb-6;
+	}
+	.current-price h2 {
+		@apply mb-2 text-5xl text-white;
+	}
+	.change-badge {
+		@apply inline-block rounded-lg px-6 py-3 text-[1.1rem] font-semibold;
+	}
+	.price-ranges {
+		@apply flex flex-wrap gap-8;
+	}
+	.price-range {
+		@apply flex flex-col gap-2;
+	}
+	.range-label {
+		@apply text-[0.85rem] font-semibold text-muted-text;
+	}
+	.range-value {
+		@apply text-[1.2rem] font-bold text-body-text;
+	}
+	.chart-section h3 {
+		@apply mb-8 text-2xl text-body-text;
+	}
+	.stats-grid {
+		@apply mb-8 grid gap-6;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	}
+	.stat-card {
+		@apply flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/3 p-6 backdrop-blur-[20px];
+	}
+	.stat-card .stat-label {
+		@apply text-[0.85rem];
+	}
+	.stat-card .stat-value {
+		@apply text-2xl;
+	}
+
+	/* Preserve the original <= 768px breakpoint. */
+	@media (max-width: 768px) {
+		.header-content {
+			@apply flex-col text-center;
+		}
+		.search-section {
+			@apply max-w-full;
+		}
+		.logo-section h1 {
+			@apply text-[2rem];
+		}
+		.controls {
+			@apply flex-col items-stretch;
+		}
+		.filter-group {
+			@apply flex-col items-stretch;
+		}
+		.filter-group select {
+			@apply w-full;
+		}
+		.view-toggle {
+			@apply justify-center;
+		}
+		.crypto-container.grid {
+			@apply grid-cols-1;
+		}
+		.coin-header {
+			@apply flex-col items-start;
+		}
+		.coin-title h1 {
+			@apply text-2xl;
+		}
+		.current-price h2 {
+			@apply text-[2rem];
+		}
+		.stats-grid {
+			@apply grid-cols-1;
+		}
+	}
+}
