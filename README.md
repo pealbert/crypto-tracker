@@ -1,3 +1,3 @@
 # Crypto Tracker
 
-3:04:20
+3:27:40
