@@ -13,6 +13,7 @@ export const Home = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [viewMode, setViewMode] = useState<ViewMode>("grid");
 	const [sortBy, setSortBy] = useState<SortBy>("market_cap_rank");
+	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
 		let cancelled = false;
@@ -43,7 +44,11 @@ export const Home = () => {
 	}, []);
 
 	const filteredList = useMemo(() => {
-		const filtered = [...cryptoList];
+		const filtered = cryptoList.filter(
+			(crypto) =>
+				crypto.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				crypto.symbol.toLowerCase().includes(searchQuery.toLowerCase()),
+		);
 
 		filtered.sort((a, b) => {
 			switch (sortBy) {
@@ -82,14 +87,30 @@ export const Home = () => {
 		});
 
 		return filtered;
-	}, [cryptoList, sortBy]);
+	}, [cryptoList, sortBy, searchQuery]);
 
 	return (
 		<div className="app">
+			<header className="header">
+				<div className="header-content">
+					<div className="logo-section">
+						<h1>Crypto Tracker</h1>
+						<p>Real-time cryptocurrency prices and market data</p>
+					</div>
+					<div className="search-section">
+						<input
+							type="text"
+							placeholder="Search cryptos..."
+							className="search-input"
+							onChange={(e) => setSearchQuery(e.target.value)}
+							value={searchQuery}
+						/>
+					</div>
+				</div>
+			</header>
 			<div className="controls">
 				<div className="filter-group">
 					<label htmlFor="sort-by">Sort by:</label>
-
 					<select id="sort-by" value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
 						<option value="market_cap_rank">Rank</option>
 						<option value="name">Name</option>
