@@ -28,6 +28,39 @@ export interface Crypto {
 	last_updated: string;
 }
 
+export interface CoinDetails {
+	id: string;
+	symbol: string;
+	name: string;
+	description: {
+		en: string;
+	};
+	image: {
+		thumb: string;
+		small: string;
+		large: string;
+	};
+	market_cap_rank: number | null;
+	market_data: {
+		current_price: {
+			usd: number;
+		};
+		market_cap: {
+			usd: number;
+		};
+		total_volume: {
+			usd: number;
+		};
+		high_24h: {
+			usd: number;
+		};
+		low_24h: {
+			usd: number;
+		};
+		price_change_percentage_24h: number | null;
+	};
+}
+
 export const fetchCryptos = async (): Promise<Crypto[]> => {
 	const response = await fetch(
 		`${BASE_URL}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`,
@@ -38,4 +71,16 @@ export const fetchCryptos = async (): Promise<Crypto[]> => {
 	}
 
 	return (await response.json()) as Crypto[];
+};
+
+export const fetchCoinData = async (id: string): Promise<CoinDetails> => {
+	const response = await fetch(
+		`${BASE_URL}/coins/${encodeURIComponent(id)}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`,
+	);
+
+	if (!response.ok) {
+		throw new Error(`Failed to fetch coin ${id}: ${response.status}`);
+	}
+
+	return (await response.json()) as CoinDetails;
 };
