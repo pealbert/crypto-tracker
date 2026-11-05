@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { fetchCoinData, type CoinDetails } from "@/api/coinGecko";
+import { cn } from "@/lib/utils";
+import { formatPrice } from "@/utils/formatter";
+
+type ErrorType = "not-found" | "fetch-error";
 
 export const CoinDetail = () => {
 	const { id } = useParams<{ id: string }>();
@@ -9,7 +13,7 @@ export const CoinDetail = () => {
 
 	const [coin, setCoin] = useState<CoinDetails | null>(null);
 	const [loadedId, setLoadedId] = useState<string | null>(null);
-	const [error, setError] = useState<"not-found" | "fetch-error" | null>(null);
+	const [error, setError] = useState<ErrorType | null>(null);
 
 	useEffect(() => {
 		if (!id) return;
@@ -89,5 +93,46 @@ export const CoinDetail = () => {
 		);
 	}
 
-	return <div>{coin?.id}</div>;
+	const priceChange = coin?.market_data.price_change_percentage_24h || 0;
+	const isPositive = priceChange >= 0;
+
+	return (
+		<div className="app">
+			<header className="header">
+				<div className="header-content">
+					<div className="logo-section">
+						<h1>🚀 Crypto Tracker</h1>
+						<p>Real-time cryptocurrency prices and market data</p>
+					</div>
+
+					<button type="button" onClick={() => navigate("/")} className="back-button">
+						← Back to List
+					</button>
+				</div>
+			</header>
+
+			<div className="coin-detail">
+				<div className="coin-header">
+					<div className="coin-title">
+						<img src={coin?.image.large} alt={coin?.name} />
+						<div>
+							<h1>{coin?.name}</h1>
+							<p className="symbol">{coin?.symbol.toUpperCase()}</p>
+						</div>
+					</div>
+
+					<span className="rank">Rank #{coin?.market_cap_rank}</span>
+				</div>
+
+				<div className="coin-price-section">
+					<div className="current-price">
+						<h2 className="price">{formatPrice(coin?.market_data.current_price.usd ?? 0)}</h2>
+						<span className={cn("change-badge", isPositive ? "positive" : "negative")}>
+							{isPositive ? "↑" : "↓"} {Math.abs(priceChange).toFixed(2)}%
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 };
