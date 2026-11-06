@@ -51,6 +51,8 @@ export interface CoinDetails {
 		total_volume: {
 			usd: number;
 		};
+		circulating_supply: number | null;
+		total_supply: number | null;
 		high_24h: {
 			usd: number;
 		};
@@ -59,6 +61,19 @@ export interface CoinDetails {
 		};
 		price_change_percentage_24h: number | null;
 	};
+}
+
+export type ChartPoint = [timestamp: number, value: number];
+
+export interface ChartData {
+	prices: ChartPoint[];
+	market_caps: ChartPoint[];
+	total_volumes: ChartPoint[];
+}
+
+export interface FormattedChartData {
+	timestamp: number;
+	price: number;
 }
 
 export const fetchCryptos = async (): Promise<Crypto[]> => {
@@ -83,4 +98,16 @@ export const fetchCoinData = async (id: string): Promise<CoinDetails> => {
 	}
 
 	return (await response.json()) as CoinDetails;
+};
+
+export const fetchChartData = async (id: string): Promise<ChartData> => {
+	const response = await fetch(
+		`${BASE_URL}/coins/${encodeURIComponent(id)}/market_chart?vs_currency=usd&days=7`,
+	);
+
+	if (!response.ok) {
+		throw new Error(`Failed to fetch chart data for ${id}: ${response.status}`);
+	}
+
+	return (await response.json()) as ChartData;
 };

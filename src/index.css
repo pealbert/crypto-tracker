@@ -66,18 +66,33 @@
 	.filter-group {
 		@apply flex items-center gap-4;
 	}
+
 	.filter-group label {
 		@apply font-semibold text-body-text;
 	}
+
 	.filter-group select {
 		@apply cursor-pointer rounded-lg border border-white/10 bg-white/5 px-5 py-3 text-[0.95rem] text-white backdrop-blur-[10px] transition-all duration-300;
+
+		color-scheme: dark;
 	}
+
 	.filter-group select:hover {
 		@apply bg-white/8;
 	}
+
 	.filter-group select:focus {
 		@apply border-accent outline-none;
+
 		box-shadow: 0 0 0 3px rgb(173 216 230 / 20%);
+	}
+
+	.filter-group select option {
+		@apply bg-[#121416] text-white;
+	}
+
+	.filter-group select option:checked {
+		@apply bg-[#263b45] text-white;
 	}
 	.view-toggle {
 		@apply flex gap-2;
