@@ -154,7 +154,7 @@ export const Home = () => {
 			)}
 
 			<footer className="footer">
-				<p>Data provided by CoinGecko API · Rate Limitied</p>
+				<p>Data provided by CoinGecko API · Rate Limited</p>
 			</footer>
 		</div>
 	);
